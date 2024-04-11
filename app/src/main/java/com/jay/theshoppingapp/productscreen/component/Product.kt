@@ -1,6 +1,5 @@
 package com.jay.theshoppingapp.productscreen.component
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -27,18 +26,15 @@ import com.jay.theshoppingapp.model.Product
 @Composable
 fun Product(
     modifier: Modifier = Modifier,
-    product: Product,
-    onClick: (Product) -> Unit
+    product: Product
 ) {
-        Card(modifier = modifier.then(
-            Modifier.clickable {
-                onClick(product)
-            }
-        ),
+    Card(
+        modifier = modifier,
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 10.dp
-        )) {
+        )
+    ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -70,7 +66,6 @@ fun ProductPreview() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp, horizontal = 4.dp),
-        //.background(color = MaterialTheme.colorScheme.error),
         product = Product(
             id = 1,
             title = "iPhone 9",
@@ -86,7 +81,6 @@ fun ProductPreview() {
                 "https://cdn.dummyjson.com/product-images/1/4.jpg",
                 "https://cdn.dummyjson.com/product-images/1/thumbnail.jpg"
             )
-        ),
-        {}
+        )
     )
 }

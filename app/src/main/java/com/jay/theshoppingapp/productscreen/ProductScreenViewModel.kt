@@ -1,76 +1,75 @@
 package com.jay.theshoppingapp.productscreen
 
-import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jay.theshoppingapp.core.result.Result
 import com.jay.theshoppingapp.di.dispatchers.Dispatchers
-import com.jay.theshoppingapp.model.Product
 import com.jay.theshoppingapp.productscreen.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
-import com.jay.theshoppingapp.core.result.Result
-import kotlinx.coroutines.withContext
 
 @HiltViewModel
 class ProductScreenViewModel @Inject constructor(
     @Dispatchers.IODispatcher private val ioDispatcher: CoroutineContext,
-    @Dispatchers.MainDispatcher private val mainDispatcher: CoroutineContext,
     private val productRepository: ProductRepository
 ) : ViewModel() {
 
-    val uiStates: MutableState<ProductScreenUiState> = mutableStateOf(ProductScreenUiState())
+    val _uiState: MutableStateFlow<ProductScreenUiState> = MutableStateFlow(ProductScreenUiState())
+    val uiState: StateFlow<ProductScreenUiState> = _uiState.asStateFlow()
 
     init {
-        uiStates.value = uiStates.value.copy(
-            title = "Product"
-        )
+        _uiState.update {
+            it.copy(title = "Product")
+        }
+
         fetchProducts()
     }
 
     private fun fetchProducts() {
         viewModelScope.launch(ioDispatcher) {
-            productRepository.fetchProducts().collect {
-
-                withContext(mainDispatcher){
-                    when(it) {
-                        is Result.Error -> {
-                            uiStates.value = uiStates.value.copy(
-                                error = Exception("Something went Wrong")
-                            )
-                        }
-                        is Result.Loading -> {
-                            uiStates.value = uiStates.value.copy(
-                                loading = true
-                            )
-                        }
-                        is Result.NoInternet -> {
-                            uiStates.value = uiStates.value.copy(
+            productRepository.fetchProducts().collect { res ->
+                when (res) {
+                    is Result.Error -> {
+                        _uiState.update {
+                            it.copy(
                                 loading = false,
-                                error = Exception("Please check internet connection...")
+                                error = Error("Something went Wrong")
                             )
                         }
-                        is Result.Success -> {
-                            uiStates.value = uiStates.value.copy(
-                                loading = false
-                                // products = it.data
+                    }
+
+                    is Result.Loading -> {
+                        _uiState.update {
+                            it.copy(loading = true)
+                        }
+                    }
+
+                    is Result.NoInternet -> {
+                        _uiState.update {
+                            it.copy(
+                                loading = false,
+                                error = Error("Please check internet connection...")
                             )
-                            uiStates.value.products.addAll(it.data)
+                        }
+                    }
+
+                    is Result.Success -> {
+                        _uiState.update {
+                            it.copy(
+                                loading = false,
+                                products = ImmutableList(res.data)
+                            )
                         }
                     }
                 }
-
-
             }
-
         }
     }
 
-    fun onProductClicked(it: Product) {
-        Log.d("JAY",it.brand+"-------")
-    }
 }

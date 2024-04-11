@@ -4,6 +4,7 @@ package com.jay.theshoppingapp.productscreen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,9 +20,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jay.theshoppingapp.core.compose.MobilePreview
 import com.jay.theshoppingapp.productscreen.component.Product
@@ -32,27 +37,15 @@ fun UsersScreen(
     modifier: Modifier = Modifier,
     productScreenViewModel: ProductScreenViewModel
 ) {
-//    val snackbarHostState = remember { SnackbarHostState() }
-//    LaunchedEffect(userScreenViewModel.uiStates.value.error) {
-//        userScreenViewModel.uiStates.value.error?.let {
-//            snackbarHostState.showSnackbar(
-//                it.message ?: "Something went wrong",
-//                duration = SnackbarDuration.Long
-//            )
-//        }
-//    }
-  
+
+    val state by productScreenViewModel.uiState.collectAsState()
     Scaffold(
-        //snackbarHost = { SnackbarHost(snackbarHostState) },
         modifier = modifier,
         topBar = {
-            TopAppBar(title = { Text(text = productScreenViewModel.uiStates.value.title) })
+            TopAppBar(title = { Text(text = state.title) })
         }
     ) {
-//        if (userScreenViewModel.uiStates.value.error != null){
-//           Text(text =userScreenViewModel.uiStates.value.error!!.message ?: "Something went wrong")
-//        }
-        if (productScreenViewModel.uiStates.value.loading) {
+        if (state.loading) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -63,25 +56,37 @@ fun UsersScreen(
                 )
             }
         } else {
-            LazyVerticalGrid(
-                modifier = Modifier.padding(top = it.calculateTopPadding()),
-                contentPadding = PaddingValues(horizontal = 8.dp),
-                //columns = GridCells.Fixed(2),
-                columns = GridCells.Adaptive(minSize = 128.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                content = {
-                    items(
-                        items = productScreenViewModel.uiStates.value.products,
-                        key = { it.id }
-                    ) {
-                        Product(
-                            modifier = Modifier.fillMaxWidth(), product = it,
-                            productScreenViewModel::onProductClicked
-                        )
-                    }
+            if (state.error != null) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = state.error?.message ?: "Issue occurred",
+                        color = Color.Red,
+                        fontSize = 16.sp
+                    )
                 }
-            )
+            } else {
+                LazyVerticalGrid(
+                    modifier = Modifier.padding(top = it.calculateTopPadding()),
+                    contentPadding = PaddingValues(horizontal = 8.dp),
+                    //columns = GridCells.Fixed(2),
+                    columns = GridCells.Adaptive(minSize = 128.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    content = {
+                        items(
+                            items = state.products.items,
+                            key = { it.id }
+                        ) {
+                            Product(
+                                modifier = Modifier.fillMaxWidth(), product = it,
+                            )
+                        }
+                    }
+                )
+            }
         }
     }
 }
