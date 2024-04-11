@@ -4,8 +4,8 @@ import android.content.Context
 import android.util.Log
 import com.google.gson.GsonBuilder
 import com.jay.theshoppingapp.BuildConfig
-import com.jay.theshoppingapp.core.inteceptors.ConnectivityInterceptor
-import com.jay.theshoppingapp.core.inteceptors.NetworkLoggerInterceptor
+import com.jay.theshoppingapp.core.interceptors.ConnectivityInterceptor
+import com.jay.theshoppingapp.core.interceptors.NetworkLoggerInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

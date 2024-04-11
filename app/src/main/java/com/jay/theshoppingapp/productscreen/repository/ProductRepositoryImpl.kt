@@ -1,7 +1,7 @@
 package com.jay.theshoppingapp.productscreen.repository
 
 import android.util.Log.DEBUG
-import com.jay.theshoppingapp.core.inteceptors.ConnectivityInterceptor
+import com.jay.theshoppingapp.core.interceptors.ConnectivityInterceptor
 import com.jay.theshoppingapp.core.logger.AppLoggerImpl
 import com.jay.theshoppingapp.core.result.Result
 import com.jay.theshoppingapp.model.Products

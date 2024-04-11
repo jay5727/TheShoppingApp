@@ -1,4 +1,4 @@
-package com.jay.theshoppingapp.core.inteceptors
+package com.jay.theshoppingapp.core.interceptors
 
 import android.util.Log
 import com.jay.theshoppingapp.core.logger.AppLoggerImpl.log
