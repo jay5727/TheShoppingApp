@@ -12,7 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.jay.theshoppingapp.productscreen.ProductScreenViewModel
-import com.jay.theshoppingapp.productscreen.UsersScreen
+import com.jay.theshoppingapp.productscreen.ProductScreen
 import com.jay.theshoppingapp.ui.theme.TheShoppingAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     NavHost(navController, startDestination = "ProductsScreen") {
                         composable("ProductsScreen") {
-                            UsersScreen(
+                            ProductScreen(
                                 modifier = Modifier.fillMaxSize(),
                                 productScreenViewModel = hiltViewModel<ProductScreenViewModel>()
                             )

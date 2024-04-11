@@ -33,7 +33,7 @@ import com.jay.theshoppingapp.productscreen.component.Product
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun UsersScreen(
+fun ProductScreen(
     modifier: Modifier = Modifier,
     productScreenViewModel: ProductScreenViewModel
 ) {
@@ -94,7 +94,7 @@ fun UsersScreen(
 @MobilePreview
 @Composable
 fun PreviewUsersScreen() {
-    UsersScreen(
+    ProductScreen(
         modifier = Modifier.fillMaxSize(),
         productScreenViewModel = hiltViewModel<ProductScreenViewModel>()
     )
