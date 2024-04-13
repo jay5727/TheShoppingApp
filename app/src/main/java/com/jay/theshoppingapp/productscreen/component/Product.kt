@@ -1,23 +1,27 @@
 package com.jay.theshoppingapp.productscreen.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.jay.theshoppingapp.R
 import com.jay.theshoppingapp.core.compose.MobilePreview
@@ -29,33 +33,63 @@ fun Product(
     product: Product
 ) {
     Card(
-        modifier = modifier,
-        shape = RoundedCornerShape(8.dp),
+        modifier = modifier.fillMaxWidth().heightIn(max = 200.dp),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 10.dp
-        )
+        ),
+        shape = RoundedCornerShape(8.dp),
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.fillMaxWidth()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.Start,
         ) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(product.thumbnail)
-                    .crossfade(true)
-                    .build(),
-                placeholder = painterResource(R.drawable.ic_launcher_background),
-                contentDescription = product.title,
-                contentScale = ContentScale.Fit,
+            Image(
+                painter = rememberAsyncImagePainter(
+                    ImageRequest.Builder(LocalContext.current)
+                        .data(data = product.thumbnail)
+                        .apply(block = fun ImageRequest.Builder.() {
+                            placeholder(R.drawable.baseline_image_24)
+                            crossfade(true)
+                        }).build()
+                ),
+                contentDescription = null,
                 modifier = Modifier
-                    .size(width = 150.dp, height = 150.dp)
-                    .clip(AbsoluteRoundedCornerShape(size = 8.dp))
+                    .fillMaxWidth()
+                    .height(100.dp)
+                    .align(CenterHorizontally),
+                contentScale = ContentScale.FillBounds
             )
-            Text(text = product.title ?: "")
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = product.title ?: "NA",
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = product.category ?: "NA",
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.ExtraLight,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "$${product.price}",
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxWidth()
             )
+            Spacer(modifier = Modifier.height(12.dp))
         }
+
     }
 }
 

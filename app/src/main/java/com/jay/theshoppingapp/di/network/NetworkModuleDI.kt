@@ -23,16 +23,6 @@ import kotlin.coroutines.CoroutineContext
 @InstallIn(SingletonComponent::class)
 class NetworkModuleDI {
 
-    /*@Provides
-    @Singleton
-    fun provideClientConfig(): OkHttpClient {
-        return OkHttpClient.Builder().addInterceptor { chain ->
-            val request = chain.request().newBuilder()
-                .addHeader(AUTHORIZATION, "$BEARER key").build()
-            chain.proceed(request)
-        }.build()
-    }*/
-
     @Provides
     @Singleton
     fun provideClientConfig(@ApplicationContext context: Context): OkHttpClient {
@@ -73,8 +63,4 @@ class NetworkModuleDI {
         return Dispatchers.IO + coroutineExceptionHandler
     }
 
-    private companion object {
-        const val AUTHORIZATION = "Authorization"
-        const val BEARER = "Bearer"
-    }
 }

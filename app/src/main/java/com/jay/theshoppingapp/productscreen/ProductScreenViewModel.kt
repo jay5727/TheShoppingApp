@@ -25,7 +25,7 @@ class ProductScreenViewModel @Inject constructor(
 
     init {
         _uiState.update {
-            it.copy(title = "Product")
+            it.copy(title = "My Shoppie")
         }
 
         fetchProducts()

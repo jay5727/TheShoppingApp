@@ -1,8 +1,6 @@
 package com.jay.theshoppingapp.productscreen
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.jay.theshoppingapp.model.Product
 
 data class ProductScreenUiState(
